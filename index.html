@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CASO #1479-B // ARQUIVO CONFIDENCIAL</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Special+Elite&family=Courier+Prime:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #030303;
+      color: #f5f5f4;
+      font-family: 'Courier Prime', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .mobile-frame {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      max-width: 440px;
+      max-height: 940px;
+      aspect-ratio: 9 / 16;
+      background: #000;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0,0,0,0.95);
+    }
+
+    /* --- TELA 1: ABERTURA --- */
+    #tela-intro {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, #1c1917 0%, #050505 95%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 40px 22px;
+      text-align: center;
+      z-index: 40;
+      transition: opacity 0.5s ease;
+    }
+
+    .badge-top {
+      background: #991b1b;
+      color: #fff;
+      font-family: 'Special Elite', cursive;
+      font-size: 13px;
+      padding: 6px 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: inline-block;
+      border: 1px dashed rgba(255,255,255,0.4);
+      box-shadow: 0 0 15px rgba(153, 27, 27, 0.4);
+    }
+
+    .intro-title {
+      font-family: 'Special Elite', cursive;
+      font-size: 26px;
+      color: #dc2626;
+      line-height: 1.3;
+      margin-top: 15px;
+      text-shadow: 0 0 12px rgba(220, 38, 38, 0.5);
+    }
+
+    .intro-desc {
+      font-size: 14px;
+      color: #a8a29e;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    .timer-container {
+      background: #000;
+      border: 2px solid #991b1b;
+      padding: 16px 12px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(153, 27, 27, 0.3);
+      width: 100%;
+    }
+
+    .timer-label {
+      font-size: 11px;
+      color: #78716c;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .digital-clock {
+      font-family: 'Orbitron', monospace;
+      color: #ef4444;
+      font-size: 24px;
+      letter-spacing: 1px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .clock-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .clock-unit span {
+      font-family: 'Courier Prime', monospace;
+      font-size: 9px;
+      color: #a8a29e;
+      margin-top: 4px;
+    }
+
+    .btn-start {
+      background: #b91c1c;
+      color: #fff;
+      font-family: 'Special Elite', cursive;
+      font-size: 17px;
+      padding: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      letter-spacing: 1.5px;
+      box-shadow: 0 4px 15px rgba(185, 28, 28, 0.5);
+    }
+
+    /* --- TELA 2: MESA NO ESCURO / LANTERNA --- */
+    #tela-mesa {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .desk-bg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    #lanterna-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.98);
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .instruction-bar {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      background: rgba(12, 10, 9, 0.85);
+      border-left: 3px solid #dc2626;
+      padding: 10px;
+      font-size: 11px;
+      color: #e7e5e4;
+      backdrop-filter: blur(3px);
+      z-index: 25;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    /* --- CONTADOR DE PISTAS --- */
+    #contador-pistas {
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.85);
+      border: 1.5px solid #ef4444;
+      color: #fca5a5;
+      font-family: 'Special Elite', cursive;
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 4px;
+      z-index: 30; 
+      pointer-events: none;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    /* --- MARCADORES CLICÁVEIS VISÍVEIS --- */
+    .spot {
+      position: absolute;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .spot-tag {
+      background: rgba(0, 0, 0, 0.88);
+      border: 1.5px solid #ef4444;
+      color: #fca5a5;
+      font-family: 'Special Elite', cursive;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+      pointer-events: none;
+      animation: pulsoTag 2s infinite ease-in-out;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+
+    .spot-tag.destaque {
+      background: #991b1b;
+      border-color: #fca5a5;
+      color: #fef08a;
+      font-size: 12px;
+      padding: 6px 10px;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.9);
+    }
+
+    @keyframes pulsoTag {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    #spot-pasta-topo { top: 12%; left: 30%; }
+    #spot-folhas-centro { top: 38%; left: 45%; }
+    #spot-polaroid-1 { top: 32%; left: 8%; }
+    #spot-polaroid-2 { top: 48%; left: 8%; }
+    #spot-polaroid-3 { top: 64%; left: 8%; }
+    #spot-lupa { top: 54%; left: 52%; }
+    #spot-celular { top: 82%; left: 10%; }
+    #spot-envelopes { top: 76%; left: 55%; }
+
+    /* --- MODAIS GERAIS --- */
+    .modal {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 50;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-paper {
+      background: #fbf7ee;
+      color: #1c1917;
+      padding: 22px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      border-radius: 4px;
+      font-family: 'Special Elite', cursive;
+      border: 1px solid #d6d3d1;
+    }
+
+    .stamp {
+      display: inline-block;
+      border: 2px solid #991b1b;
+      color: #991b1b;
+      font-size: 12px;
+      padding: 2px 8px;
+      transform: rotate(-3deg);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .modal-paper h3 { font-size: 20px; margin-bottom: 10px; color: #0c0a09; }
+    .modal-paper p { font-family: 'Courier Prime', monospace; font-size: 13px; color: #292524; line-height: 1.5; margin-bottom: 15px; }
+
+    .info-box {
+      background: #f3ece0;
+      border: 1px dashed #78716c;
+      padding: 12px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .btn-modal {
+      display: block;
+      width: 100%;
+      background: #1c1917;
+      color: #fff;
+      font-family: 'Special Elite', cursive;
+      padding: 12px;
+      border: none;
+      text-align: center;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    .btn-close { background: #78716c; margin-top: 8px; }
+
+    /* --- MODAL DO NOKIA 3310 --- */
+    #modalCelular {
+      padding: 15px;
+    }
+
+    .nokia-container {
+      width: 100%;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .nokia-screen-box {
+      position: relative;
+      width: 100%;
+      display: block;
+    }
+
+    .nokia-recortado {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.9));
+      border-radius: 12px;
+    }
+
+    #nokia-tempo-audio {
+      position: absolute;
+      top: 65.5%;
+      left: 49.5%;
+      color: #172013;
+      font-family: 'VT323', monospace;
+      font-size: 26px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      pointer-events: none;
+      transform: translateY(-50%);
+    }
+
+    .btn-end-call {
+      position: relative;
+      z-index: 10;
+      margin-top: -35px;
+      width: 90%;
+      background: linear-gradient(180deg, #b91c1c 0%, #7f1d1d 100%);
+      color: #fff;
+      font-family: 'Special Elite', cursive;
+      border: 2px solid #ef4444;
+      padding: 16px 20px;
+      cursor: pointer;
+      border-radius: 30px;
+      font-size: 16px;
+      letter-spacing: 1px;
+      box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
+      text-align: center;
+    }
+
+    .btn-end-call:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic" loop preload="auto">
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="mobile-frame" id="app-container">
+    
+    <section id="tela-intro">
+      <div>
+        <span class="badge-top">Mandato Confidencial // Caso #1479-B</span>
+        <h1 class="intro-title">VOCÊ FOI CONVOCADO</h1>
+        <p class="intro-desc">Uma investigação sigilosa foi instaurada. Use a lanterna para examinar as pistas na mesa.</p>
+      </div>
+
+      <div class="timer-container">
+        <div class="timer-label">Tempo Restante até a Ocorrência</div>
+        <div class="digital-clock">
+          <div class="clock-unit"><div id="dias">00</div><span>DIAS</span></div>:
+          <div class="clock-unit"><div id="horas">00</div><span>HORAS</span></div>:
+          <div class="clock-unit"><div id="minutos">00</div><span>MIN</span></div>:
+          <div class="clock-unit"><div id="segundos">00</div><span>SEG</span></div>
+        </div>
+      </div>
+
+      <button class="btn-start" onclick="iniciarInvestigacao()">LIGAR LANTERNA E INVESTIGAR</button>
+    </section>
+
+    <section id="tela-mesa">
+      <div class="instruction-bar">
+        🔦 Arraste o dedo para iluminar a cena e toque nos itens marcados.
+      </div>
+
+      <div id="contador-pistas">⚠️ RESTAM 7 PISTAS</div>
+
+      <img src="mesa.jpg" alt="Mesa do Caso" class="desk-bg">
+
+      <div class="spot" id="spot-pasta-topo" onclick="tentarAbrirPasta()">
+        <span class="spot-tag destaque" id="tag-pasta-principal">🔒 CASO #1479-B</span>
+      </div>
+
+      <div class="spot" id="spot-folhas-centro" onclick="abrirModal('modalRelatorio')">
+        <span class="spot-tag">📄 DEPOIMENTOS</span>
+      </div>
+
+      <div class="spot" id="spot-polaroid-1" onclick="abrirModal('modalFoto1')">
+        <span class="spot-tag">🔍 FOTO 01</span>
+      </div>
+
+      <div class="spot" id="spot-polaroid-2" onclick="abrirModal('modalFoto2')">
+        <span class="spot-tag">🔍 FOTO 02</span>
+      </div>
+
+      <div class="spot" id="spot-polaroid-3" onclick="abrirModal('modalFoto3')">
+        <span class="spot-tag">🔪 ARMA</span>
+      </div>
+
+      <div class="spot" id="spot-lupa" onclick="abrirModal('modalLupa')">
+        <span class="spot-tag">🔎 LUPA</span>
+      </div>
+
+      <div class="spot" id="spot-celular" onclick="abrirModalNokia()">
+        <span class="spot-tag">📱 NOKIA</span>
+      </div>
+
+      <div class="spot" id="spot-envelopes" onclick="abrirModal('modalEnvelopes')">
+        <span class="spot-tag">📦 EVIDÊNCIA</span>
+      </div>
+
+      <div id="lanterna-overlay"></div>
+    </section>
+
+    <div class="modal" id="modalAcessoNegado">
+      <div class="modal-paper" style="border-left: 6px solid #b91c1c;">
+        <span class="stamp" style="border-color: #b91c1c; color: #b91c1c;">ACESSO NEGADO</span>
+        <h3>ARQUIVO BLOQUEADO</h3>
+        <p>Você ainda não investigou todas as evidências da cena do crime.</p>
+        <div class="info-box">
+          Faltam pistas para desbloquear o mandato oficial. Continue procurando com a sua lanterna!
+        </div>
+        <button class="btn-modal btn-close" onclick="fecharModal('modalAcessoNegado')">Continuar Investigando</button>
+      </div>
+    </div>
+
+    <div class="modal" id="modalCelular">
+      <div class="nokia-container">
+        <div class="nokia-screen-box">
+          <img src="nokia.png" alt="Nokia 3310" class="nokia-recortado">
+          <div id="nokia-tempo-audio">00:00</div>
+        </div>
+
+        <audio id="nokiaAudio" loop preload="auto">
+          <source src="audio.mp3" type="audio/mpeg">
+        </audio>
+        
+        <button class="btn-end-call" onclick="fecharModalNokia(event)">📞 ENCERRAR CHAMADA</button>
+      </div>
+    </div>
+
+    <div class="modal" id="modalPasta">
+      <div class="modal-paper" style="border-left: 6px solid #15803d;">
+        <span class="stamp" style="border-color: #15803d; color: #15803d;">CASO DESVENDADO // MANDATO</span>
+        <h3>INTIMAÇÃO OFICIAL</h3>
+        <p>Você acessou o documento central do Caso #1479-B. Sua presença foi decretada:</p>
+        
+        <div class="info-box">
+          <strong>DATA DO CRIME:</strong> 31 de Outubro<br>
+          <strong>HORÁRIO:</strong> 21:00h<br>
+          <strong>LOCAL DA CENA:</strong> Roberio Salão de Festas e Eventos, R. S Cj Freitas Neto, II, 46 - Benedito Bentes, Maceió - AL, 57086-430<br>
+          <strong>DRESS CODE:</strong> Fantasia de Halloween ou Traje All Black
+        </div>
+
+        <div style="background: #e7e5e4; border: 1px dashed #78716c; padding: 12px; margin-bottom: 14px; text-align: center; border-radius: 4px;">
+          <p style="font-size: 11px; margin-bottom: 5px; font-weight: bold; color: #292524;">TAXA DE ORNAMENTAÇÃO (R$ 20,00)</p>
+          <p style="font-size: 14px; font-weight: bold; color: #b91c1c; margin-bottom: 10px; font-family: 'Courier Prime', monospace;" id="chavePix">(82) 99325-5059</p>
+          <button onclick="copiarPix()" style="background: #1c1917; color: #fff; border: none; padding: 8px 14px; font-family: 'Special Elite', cursive; cursor: pointer; border-radius: 4px; font-size: 12px; transition: 0.2s;">
+            📋 COPIAR CHAVE PIX
+          </button>
+        </div>
+
+        <a href="https://wa.me/5582993255059?text=Mandato%20do%20Caso%201479-B%20recebido!%20Presen%C3%A7a%20confirmada%20e%20PIX%20enviado." target="_blank" class="btn-modal" style="background:#15803d;">
+          CONFIRMAR PRESENÇA (WHATSAPP)
+        </a>
+        <button class="btn-modal btn-close" onclick="fecharModal('modalPasta')">Fechar Dossiê</button>
+      </div>
+    </div>
+
+    <div class="modal" id="modalRelatorio">
+      <div class="modal-paper">
+        <span class="stamp">Auto de Investigação</span>
+        <h3>Laudo Pericial Preliminar</h3>
+        <p>“Ocorrência de alta periculosidade registrada para o dia 31. Fontes anônimas garantem que a noite será insana e a única regra é curtir até o último suspeito cair.”</p>
+        <button class="btn-modal btn-close" onclick="fecharModal('modalRelatorio')">Voltar à Cena</button>
+      </div>
+    </div>
+
+    <div class="modal" id="modalFoto1">
+      <div class="modal-paper">
+        <span class="stamp">Evidência Fotográfica #01</span>
+        <h3>Registro Perturbador</h3>
+        <p>A perícia revelou um vulto suspeito premeditando a ocorrência. Especialistas apontam que este indivíduo é o grande mestre por trás de todo esse mistério. Ele não vai deixar ninguém ir embora cedo.</p>
+        <button class="btn-modal btn-close" onclick="fecharModal('modalFoto1')">Guardar Arquivo</button>
+      </div>
+    </div>
+
+    <div class="modal" id="modalFoto2">
+      <div class="modal-paper">
+        <span class="stamp">Evidência Fotográfica #02</span>
+        <h3>Rastro da Cena</h3>
+        <p>Pegadas indicam que os convidados foram em direção ao salão principal.</p>
+        <button class="btn-modal btn-close" onclick="fecharModal('modalFoto2')">Guardar Arquivo</button>
+      </div>
+    </div>
+
+    <div class="modal" id="modalFoto3">
+      <div class="modal-paper">
+        <span class="stamp">Arma do Delito</span>
+        <h3>A Faca do Orçamento</h3>
+        <p>Este objeto foi usado para "cortar" nossos gastos! Para garantir que a cena do crime (ornamentação da festa) fique impecável, foi instituída uma taxa obrigatória de <strong>R$ 20,00</strong> por suspeito. Colabore para não virar a próxima evidência...</p>
+        <button class="btn-modal btn-close" onclick="fecharModal('modalFoto3')">Guardar Arquivo</button>
+      </div>
+    </div>
+
+    <div class="modal" id="modalLupa">
+      <div class="modal-paper">
+        <span class="stamp">Instrumento Pericial</span>
+        <h3>A Lupa do Detetive</h3>
+        <p>A pista final com endereço está guardada na <strong>Pasta no topo da mesa</strong>. Mas você precisa analisar tudo antes de abri-la.</p>
+        <button class="btn-modal btn-close" onclick="fecharModal('modalLupa')">Voltar à Cena</button>
+      </div>
+    </div>
+
+    <div class="modal" id="modalEnvelopes">
+      <div class="modal-paper">
+        <span class="stamp">Documento Legal</span>
+        <h3>Termo de Conduta do Suspeito</h3>
+        <p>Para cruzar a fita de isolamento e acessar a festa, você deve concordar com as seguintes diretrizes:</p>
+        <div class="info-box" style="text-align: left;">
+          🚨 <strong>O DISFARCE:</strong> É altamente recomendado comparecer com uma fantasia bem legal ou o seu melhor disfarce para confundir a perícia.<br><br>
+          🚨 <strong>DIVERSÃO CONSCIENTE:</strong> O objetivo é sair vivo e com boas histórias. Curta o interrogatório (e as bebidas) com responsabilidade!<br><br>
+          🚨 <strong>CONTRABANDO PROIBIDO:</strong> É estritamente proibida a entrada e o uso de drogas ou substâncias ilícitas. Tolerância zero, sujeito a expulsão da cena.<br><br>
+          🚨 <strong>CONFISCO:</strong> Baixo-astral e mau humor serão apreendidos imediatamente na porta.<br><br>
+          🚨 <strong>SIGILO TOTAL:</strong> O que acontece na cena, fica na cena. Prepare-se para uma noite inesquecível!
+        </div>
+        <button class="btn-modal btn-close" onclick="fecharModal('modalEnvelopes')">Li e concordo com os termos</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const bgMusic = document.getElementById('bgMusic');
+    bgMusic.volume = 0.2; // Define o volume da trilha sonora para 20%
+
+    function iniciarInvestigacao() {
+      const intro = document.getElementById('tela-intro');
+      intro.style.opacity = '0';
+      setTimeout(() => { intro.style.display = 'none'; }, 500);
+      
+      // Inicia a música de fundo ao clicar no primeiro botão
+      bgMusic.play().catch(() => {
+        console.log("O navegador bloqueou o áudio automático. Precisa de interação do usuário.");
+      });
+    }
+
+    const anoAtual = new Date().getFullYear();
+    let dataEvento = new Date(`${anoAtual}-10-31T20:30:00`).getTime();
+
+    function atualizarRelogio() {
+      const agora = new Date().getTime();
+      let diff = dataEvento - agora;
+      if (diff < 0) {
+        dataEvento = new Date(`${anoAtual + 1}-10-31T20:30:00`).getTime();
+        diff = dataEvento - agora;
+      }
+      document.getElementById('dias').innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+      document.getElementById('horas').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+      document.getElementById('minutos').innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+      document.getElementById('segundos').innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+    }
+    setInterval(atualizarRelogio, 1000);
+    atualizarRelogio();
+
+    const telaMesa = document.getElementById('tela-mesa');
+    const lanterna = document.getElementById('lanterna-overlay');
+    const container = document.getElementById('app-container');
+
+    function moverLanterna(e) {
+      let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const rect = container.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      lanterna.style.background = `radial-gradient(circle 220px at ${x}px ${y}px, transparent 0%, rgba(0, 0, 0, 0.95) 75%, rgba(0, 0, 0, 0.99) 100%)`;
+    }
+
+    telaMesa.addEventListener('mousemove', moverLanterna);
+    telaMesa.addEventListener('touchmove', function(e) {
+      moverLanterna(e);
+      e.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener('load', () => {
+      const rect = container.getBoundingClientRect();
+      lanterna.style.background = `radial-gradient(circle 220px at ${rect.width/2}px ${rect.height/2}px, transparent 0%, rgba(0, 0, 0, 0.95) 75%, rgba(0, 0, 0, 0.99) 100%)`;
+    });
+
+    let pistasEncontradas = new Set();
+    const totalPistas = 7; 
+
+    function registrarPista(idModal) {
+      if (idModal !== 'modalPasta' && idModal !== 'modalAcessoNegado') {
+        pistasEncontradas.add(idModal);
+        
+        const restam = totalPistas - pistasEncontradas.size;
+        const contadorDiv = document.getElementById('contador-pistas');
+        
+        if (restam > 0) {
+          contadorDiv.innerHTML = `⚠️ RESTAM ${restam} PISTAS`;
+        } else {
+          contadorDiv.innerHTML = `✅ ACESSO LIBERADO`;
+          contadorDiv.style.backgroundColor = 'rgba(21, 128, 61, 0.95)';
+          contadorDiv.style.borderColor = '#4ade80';
+          contadorDiv.style.color = '#fff';
+
+          const tagPasta = document.getElementById('tag-pasta-principal');
+          tagPasta.innerHTML = '🔓 ABRIR CASO #1479-B';
+          tagPasta.style.backgroundColor = 'rgba(21, 128, 61, 0.95)';
+          tagPasta.style.borderColor = '#4ade80';
+          tagPasta.style.color = '#fff';
+        }
+      }
+    }
+
+    function tentarAbrirPasta() {
+      if (pistasEncontradas.size >= totalPistas) {
+        document.getElementById('modalPasta').style.display = 'flex';
+      } else {
+        document.getElementById('modalAcessoNegado').style.display = 'flex';
+      }
+    }
+
+    function abrirModal(id) {
+      registrarPista(id);
+      document.getElementById(id).style.display = 'flex';
+    }
+
+    function fecharModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    const audioNokia = document.getElementById('nokiaAudio');
+    const displayTempo = document.getElementById('nokia-tempo-audio');
+
+    audioNokia.addEventListener('timeupdate', () => {
+      const segundosTotais = Math.floor(audioNokia.currentTime);
+      const minutos = String(Math.floor(segundosTotais / 60)).padStart(2, '0');
+      const segundos = String(segundosTotais % 60).padStart(2, '0');
+      displayTempo.innerText = `${minutos}:${segundos}`;
+    });
+
+    function abrirModalNokia() {
+      registrarPista('modalCelular'); 
+      document.getElementById('modalCelular').style.display = 'flex';
+      
+      // Pausa a música de fundo
+      bgMusic.pause();
+
+      audioNokia.currentTime = 0;
+      displayTempo.innerText = "00:00";
+      audioNokia.play().catch(() => {});
+    }
+
+    function fecharModalNokia(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('modalCelular').style.display = 'none';
+      audioNokia.pause();
+      audioNokia.currentTime = 0;
+      displayTempo.innerText = "00:00";
+      
+      // Retoma a música de fundo
+      bgMusic.play().catch(() => {});
+    }
+
+    function copiarPix() {
+      const chave = document.getElementById("chavePix").innerText;
+      navigator.clipboard.writeText(chave).then(() => {
+        alert("Chave PIX copiada para a área de transferência! Cole no seu aplicativo de banco.");
+      }).catch(err => {
+        console.error('Erro ao copiar: ', err);
+      });
+    }
+  </script>
+</body>
+</html>
